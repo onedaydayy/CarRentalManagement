@@ -26,6 +26,7 @@ namespace CarRentalManagement.Server.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Booking> Bookings { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

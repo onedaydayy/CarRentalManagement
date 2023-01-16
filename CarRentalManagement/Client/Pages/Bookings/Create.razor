@@ -1,0 +1,162 @@
+﻿@page "/bookings/create/"
+
+@inject HttpClient _client
+
+@inject NavigationManager _navManager
+
+
+
+<h3 class="card-title">Create New Booking</h3>
+
+<hr />
+
+<br />
+
+<FormComponent ButtonText="Create Booking" booking="booking" OnValidSubmit="@CreateBooking" />
+@*
+    <EditForm Model="@booking" OnValidSubmit="CreateBooking">
+
+        <DataAnnotationsValidator />
+
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label>Vehicle: </label>
+            <div>
+                <InputSelect @bind-Value="booking.VehicleId" class="form-control">
+                    <option value="">-- Select Vehicle --</option>
+                    @if (Vehicles != null)
+                    {
+                        foreach (var vehicle in Vehicles)
+                        {
+                            <option value="@vehicle.Id">@vehicle.Make.Name @vehicle.Model.Name - @vehicle.LicensePlateNumber </option>
+                        }
+                    }
+
+                </InputSelect>
+
+                <ValidationMessage For="@(() => booking.VehicleId)" />
+
+            </div>
+
+        </div>
+
+
+
+        <div class="form-group">
+
+            <label>Customer: </label>
+
+            <div>
+
+                <InputSelect @bind-Value="booking.CustomerId" class="form-control">
+
+                    <option value="">-- Select Customer --</option>
+
+                    @if (Customers != null)
+
+                    {
+
+                        foreach (var customer in Customers)
+
+                        {
+
+                            <option value="@customer.Id">@customer.FirstName - @customer.DrivingLicense </option>
+
+                        }
+
+                    }
+
+                </InputSelect>
+
+                <ValidationMessage For="@(() => booking.CustomerId)" />
+
+            </div>
+
+        </div>
+
+
+
+        <div class="form-group">
+
+            <label>Date Out: </label>
+
+            <div>
+
+                <InputDate @bind-Value="@booking.DateOut" class="form-control" />
+
+                <ValidationMessage For="@(() => booking.DateOut)" />
+
+            </div>
+
+        </div>
+
+
+
+        @if (booking.Id > 0)
+
+        {
+
+            <div class="form-group">
+
+                <label>Date In: </label>
+
+                <div>
+
+                    <InputDate @bind-Value="@booking.DateIn" class="form-control" />
+
+                    <ValidationMessage For="@(() => booking.DateIn)" />
+
+                </div>
+
+            </div>
+
+        }
+
+
+
+    <button type="submit" class="btn btn-success btn-block">
+
+        Create New Booking
+
+    </button>
+
+    </EditForm>
+*@
+
+
+@code {
+
+    Booking booking = new Booking();
+
+    private IList<Vehicle> Vehicles;
+
+    private IList<Customer> Customers;
+
+
+
+    protected async override Task OnInitializedAsync()
+
+    {
+
+        Vehicles = await _client.GetFromJsonAsync<List<Vehicle>>($"{Endpoints.VehiclesEndpoint}");
+
+        Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+
+        //booking.DateOut = DateTime.Now;
+
+    }
+
+
+
+    private async Task CreateBooking()
+
+    {
+
+        await _client.PostAsJsonAsync(Endpoints.BookingsEndpoint, booking);
+
+        _navManager.NavigateTo("/bookings/");
+
+    }
+
+}

@@ -1,0 +1,92 @@
+﻿<EditForm Model="@customer" OnValidSubmit="@OnValidSubmit">
+
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+
+    <fieldset disabled="@Disabled">
+
+        <div class="form-group">
+
+            <label>First Name: </label>
+            <div>
+
+                <InputText @bind-Value="@customer.FirstName" class="form-control" />
+
+                <ValidationMessage For="@(() => customer.FirstName)" />
+
+            </div>
+
+            <label>Last Name: </label>
+            <div>
+
+                <InputText @bind-Value="@customer.LastName" class="form-control" />
+
+                <ValidationMessage For="@(() => customer.LastName)" />
+
+            </div>
+
+            <label>Driving License: </label>
+            <div>
+
+                <InputText @bind-Value="@customer.DrivingLicense" class="form-control" />
+
+                <ValidationMessage For="@(() => customer.DrivingLicense)" />
+
+            </div>
+
+            <label>Address: </label>
+            <div>
+
+                <InputText @bind-Value="@customer.Address" class="form-control" />
+
+                <ValidationMessage For="@(() => customer.Address)" />
+
+            </div>
+
+            <label>Contact Number: </label>
+            <div>
+
+                <InputText @bind-Value="@customer.ContactNumber" class="form-control" />
+
+                <ValidationMessage For="@(() => customer.ContactNumber)" />
+
+            </div>
+
+            <label>Email Address: </label>
+            <div>
+
+                <InputText @bind-Value="@customer.EmailAddress" class="form-control" />
+
+                <ValidationMessage For="@(() => customer.EmailAddress)" />
+
+            </div>
+
+        </div>
+    </fieldset>
+
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block">
+
+            @ButtonText
+
+        </button>
+    }
+
+    <BackToList Target="customers" />
+
+</EditForm>
+
+
+
+@code {
+    [Parameter] public bool Disabled { get; set; } = false;
+
+    [Parameter] public Customer customer { get; set; }
+
+    [Parameter] public string ButtonText { get; set; } = "Save";
+
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+}
